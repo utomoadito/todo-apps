@@ -3,6 +3,10 @@
     <div class="flex flex-col">
       <div class="flex fixed lg:w-1/3 w-full bg-blue-200 p-6 justify-between z-10">
         Todo Apps
+        <input 
+          v-model="search"
+          class="w-full h-10 px-3 text-base placeholder-gray-600 border focus:shadow-outline" 
+          type="text" placeholder="Cari"/>
       </div>
       <div class="flex flex-col pt-24 overflow-auto">
         <div class="flex text-gray-700 px-6 py-5 text-xl font-bold">Upcomming</div>
@@ -70,6 +74,7 @@ export default class Home extends Vue {
   msg = 'Hello'
   modal = false
   todoId = 0
+  search = ''
 
   created() {
     getModule(todo, store)
@@ -79,8 +84,12 @@ export default class Home extends Vue {
   }
 
   get todoByStatus() {
+    let todos = this.todos
     let finish: Array<TodosType> = [], upcomming: Array<TodosType> = []
-    this.todos.map(todo => {
+    todos = todos.filter(data => {
+      return data.task.toLowerCase().includes(this.search.toLowerCase()) || data.status.toString().includes(this.search.toLowerCase())
+    })
+    todos.map(todo => {
       if (todo.status) finish.push(todo)
       else upcomming.push(todo)
     })
