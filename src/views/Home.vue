@@ -34,7 +34,7 @@
     </div>
     <form-modal 
       @onClickCancel="onCancel"
-      :modal="modal" :todoId="todoId" />
+      :modal="modal" :todoId="todoId" :todo="todo" />
   </div>
 </template>
 
@@ -43,7 +43,7 @@ import { Options, Vue } from 'vue-class-component'
 import { namespace } from 'vuex-class'
 import { getModule } from 'vuex-module-decorators'
 import FormModal from '../components/FormModal.vue'
-import { TodosType } from '../models/todo.interface'
+import { TodosType, TodoType } from '../models/todo.interface'
 import { store } from '../store'
 import todo from '../store/todo'
 
@@ -62,7 +62,10 @@ const todoStore = namespace('todo')
 })
 export default class Home extends Vue {
   @todoStore.State todos!: Array<TodosType>
+  @todoStore.State todo!: TodoType
   @todoStore.Action fetchAllTodo!: () => void
+  @todoStore.Action getTodoById!: (id: number) => void
+  @todoStore.Mutation setTodo!: (payload: TodoType) => void
 
   msg = 'Hello'
   modal = false
@@ -85,14 +88,17 @@ export default class Home extends Vue {
   }
 
   onTodoModal(id = 0): void {
-    console.log(id)
     this.todoId = id
+    if (this.todoId > 0) {
+      this.getTodoById(this.todoId)
+    }
     this.modal = true
   }
 
   onCancel(val: boolean): void {
     this.modal = val
     this.todoId = 0
+    this.setTodo({task: '', status: false})
   }
 }
 </script>

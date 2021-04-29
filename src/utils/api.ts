@@ -21,7 +21,25 @@ const apiTodo = (() => {
 		)
 	}
 
-    return { get }
+	const post = (endpoint: string, payload: any) => {
+		return processRequest(
+			http.post(endpoint, payload)
+		)
+	}
+
+	const put = (endpoint: string, payload: any) => {
+		return processRequest(
+			http.put(endpoint, payload)
+		)
+	}
+
+	const del = (endpoint: string) => {
+		return processRequest(
+			http.delete(endpoint)
+		)
+	}
+
+    return { get, post, put, del }
 
 })()
 
